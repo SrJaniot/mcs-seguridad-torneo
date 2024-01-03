@@ -33,6 +33,15 @@ export class MenuRol extends Entity {
   })
   editar: boolean;
 
+  @property({
+    type: 'string',
+  })
+  rolId?: string;
+
+  @property({
+    type: 'string',
+  })
+  menuId?: string;
 
   constructor(data?: Partial<MenuRol>) {
     super(data);
