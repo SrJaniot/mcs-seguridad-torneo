@@ -11,3 +11,4 @@ export * from './rol.controller';
 export * from './login.controller';
 export * from './menu.controller';
 export * from './dml-postgres-mongo.controller';
+export * from './permisos.controller';

@@ -19,6 +19,9 @@ import {
 } from '@loopback/rest';
 import {Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
+//importar el decorador authenticate para proteger los metodos
+import {authenticate} from '@loopback/authentication';
+import {ConfiguracionSeguridad} from '../config/seguridad.config';
 
 export class UsuarioController {
   constructor(
@@ -46,7 +49,6 @@ export class UsuarioController {
   ): Promise<Usuario> {
     return this.usuarioRepository.create(usuario);
   }
-
   @get('/usuarios/count')
   @response(200, {
     description: 'Usuario model count',
@@ -58,6 +60,12 @@ export class UsuarioController {
     return this.usuarioRepository.count(where);
   }
 
+
+  // @authenticate("auth") se ejefcuta el metodo de autenticacion de estrategia carpeta auth archivo  strategy.ts
+  @authenticate({
+    strategy:"auth",
+    options:[ConfiguracionSeguridad.menuUsuarioID,ConfiguracionSeguridad.listarAccion]
+})
   @get('/usuarios')
   @response(200, {
     description: 'Array of Usuario model instances',

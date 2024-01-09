@@ -154,6 +154,7 @@ export class DmlPostgresMongoController {
   ): Promise<object>{
     let usuario=await this.seguridadService.identificarusuario(credenciales);
     if(usuario){
+      //generar codigo 2fa
       let codigo2fa = this.seguridadService.crearTextoAleatoria(5);
       let login: Login = new Login();
       login.usuarioId = usuario._id!;
@@ -161,6 +162,9 @@ export class DmlPostgresMongoController {
       login.estado_codigo2fa = false;
       login.token='';
       login.estado_token=false;
+
+      //reformatear la clave para no mostrarla
+      usuario.clave="";
 
       await this.loginRepository.create(login);
       //notificar al usuario via correo o sms del codigo 2fa
@@ -177,7 +181,7 @@ export class DmlPostgresMongoController {
     }
   }
 
-
+//-------------------------------------METODOS PARA EL CODIGO 2FA----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   /**
    * Metodo para validar el codigo 2fa
@@ -203,6 +207,22 @@ export class DmlPostgresMongoController {
       let token = this.seguridadService.CrearToken(usuario);
       //borrando la clave para no mostrarla
       usuario.clave="";
+      //actualizar el estado del codigo 2fa  a true
+      try{
+        this.usuarioRepository.logins(usuario._id).patch({
+          estado_codigo2fa:true,
+          token:token,
+        },
+        {
+          estado_codigo2fa:false,
+          codigo_2fa:credenciales.codigo2fa,
+        });
+
+      }catch(err){
+        throw new HttpErrors[500](`Error al actualizar el estado del codigo 2fa: ${err}`);
+      }
+
+
       return {
         "CODIGO": 200,
         "MENSAJE": "Operación exitosa",

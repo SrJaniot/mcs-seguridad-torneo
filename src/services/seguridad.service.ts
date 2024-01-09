@@ -110,4 +110,16 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
   }
 
 
+
+  /**
+   * Metodo para obtener el rol de un token
+   * @param token
+   * @returns el _id del rol
+   */
+  obtenerRolDesdeToken(token:string):string{
+    let datos = jwt.verify(token, ConfiguracionSeguridad.claveJWT);
+    return datos.rol;
+  }
+
+
 }
