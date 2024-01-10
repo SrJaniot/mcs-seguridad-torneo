@@ -3,6 +3,7 @@ import {Credenciales, FactorDeAutenticacionPorCodigo, Login, Usuario} from '../m
 import {repository} from '@loopback/repository';
 import {LoginRepository, UsuarioRepository} from '../repositories';
 import {ConfiguracionSeguridad} from '../config/seguridad.config';
+import {HttpErrors} from '@loopback/rest';
 const generator = require('generate-password');//paquete para generar claves aleatorias https://www.npmjs.com/package/generate-password   "npm i generate-password"
 const MD5 = require("crypto-js/md5");//paquete para encriptar claves https://www.npmjs.com/package/crypto-js  "npm i crypto-js"
 const jwt = require('jsonwebtoken');//paquete para generar token https://www.npmjs.com/package/jsonwebtoken  "npm i jsonwebtoken"
@@ -112,13 +113,22 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
 
 
   /**
-   * Metodo para obtener el rol de un token
+   * Metodo para verificar y obtener el rol de un token
    * @param token
    * @returns el _id del rol
    */
   obtenerRolDesdeToken(token:string):string{
-    let datos = jwt.verify(token, ConfiguracionSeguridad.claveJWT);
-    return datos.rol;
+    try {
+      let datos = jwt.verify(token, ConfiguracionSeguridad.claveJWT);
+      if(datos){
+        return datos.rol;
+      } else {
+        throw new HttpErrors.Unauthorized("El token es invalido");
+      }
+    } catch (err) {
+      //lanzar un error de token invalido
+      throw new HttpErrors.Unauthorized("El token es invalido");
+    }
   }
 
 

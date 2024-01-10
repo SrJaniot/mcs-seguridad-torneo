@@ -64,7 +64,7 @@ export class UsuarioController {
   // @authenticate("auth") se ejefcuta el metodo de autenticacion de estrategia carpeta auth archivo  strategy.ts
   @authenticate({
     strategy:"auth",
-    options:[ConfiguracionSeguridad.menuUsuarioID,ConfiguracionSeguridad.listarAccion]
+    options:[ConfiguracionSeguridad.menu_ADMINISTAR_UsuarioID,ConfiguracionSeguridad.listarAccion]
 })
   @get('/usuarios')
   @response(200, {

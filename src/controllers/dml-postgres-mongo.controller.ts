@@ -1,10 +1,11 @@
 // Uncomment these imports to begin using these cool features!
 import {HttpErrors, getModelSchemaRef, post, requestBody, response} from '@loopback/rest';
-import {CrearusuarioMongoPostgres, Credenciales, FactorDeAutenticacionPorCodigo, FunInsertJugadorDatospersonales, GenericModel, Login, Usuario} from '../models';
+import {CrearusuarioMongoPostgres, Credenciales, FactorDeAutenticacionPorCodigo,  GenericModel, Login, Usuario} from '../models';
 import {DefaultCrudRepository, juggler, repository} from '@loopback/repository';
 import {LoginRepository, UsuarioRepository} from '../repositories';
 import {inject, service} from '@loopback/core';
 import {SeguridadService} from '../services';
+import {ConfiguracionSeguridad} from '../config/seguridad.config';
 
 // import {inject} from '@loopback/core';
 
@@ -63,7 +64,7 @@ export class DmlPostgresMongoController {
     data: CrearusuarioMongoPostgres ,
   ): Promise<object> {
     try {
-      const sql = 'SELECT fun_insert_jugador_datospersonales($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+      const sql =ConfiguracionSeguridad.funcionInsertarUsuarioJugadorDatosPersonales;
       const params = [
         data.nombre,
         data.edad,
@@ -84,7 +85,7 @@ export class DmlPostgresMongoController {
       usuario.correo = data.correo;
       usuario.celular = data.celular;
       //ROL USUARIO
-      usuario.rolId='659904a09622df3580b5c275'
+      usuario.rolId=ConfiguracionSeguridad.rolJugadorID;
       //CIFRAR LA CONTRASEÑA
       let clavecifrada = this.seguridadService.encriptartexto(data.clave);
       //ASIGNAR LA CLAVE CIFRADA AL USUARIO

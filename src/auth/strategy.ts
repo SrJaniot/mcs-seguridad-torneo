@@ -35,10 +35,10 @@ export class AuthStrategy implements AuthenticationStrategy {
     let token=parseBearerToken(request);
     if(token){
       let idRol=this.servicioSeguridad.obtenerRolDesdeToken(token);
-      let idMenu: string =this.metadata[0].options![0];
-      let Accion: string =this.metadata[0].options![1];
+      let idMenu: string =this.metadata[0].options![0]; //MENU ADMINISTRAR USUARIO
+      let Accion: string =this.metadata[0].options![1]; //ACCION LISTAR
       //console.log(this.metadata);
-
+      // EN ESTA VARIABLE PERMISO LA API SABE QUE PERMISO PUEDE REALIZAR ESTE ROL
       let permiso = await this.repositorioMenuRol.findOne({
         where:{
           rolId:idRol,
@@ -72,7 +72,7 @@ export class AuthStrategy implements AuthenticationStrategy {
           });
           return perfil;
         }else{
-          return undefined;
+          throw new HttpErrors[401]("El usuario no tiene permiso para realizar esta accion");
         }
 
       }else{
