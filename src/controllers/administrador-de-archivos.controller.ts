@@ -49,11 +49,52 @@ export class AdministradorDeArchivosController {
       },
     },
   })
-  async CargarArchivoProducto(
+  async CargarArchivoUsuario(
     @inject(RestBindings.Http.RESPONSE) response: Response,
     @requestBody.file() request: Request,
   ): Promise<object | false> {
     const filePath = path.join(__dirname, ConfiguracionGeneral.carpetaFotosUsuarios);
+    let res = await this.StoreFileToPath(
+      filePath,
+      ConfiguracionGeneral.campodeNombreArchivo,
+      request,
+      response,
+      ConfiguracionGeneral.extensionesPermitidasImagenes,
+    );
+    if (res) {
+      const filename = response.req?.file?.filename;
+      if (filename) {
+        return {file: filename};
+      }
+    }
+    return res;
+  }
+
+
+
+
+
+
+  //@authenticate('auth')
+  @post('/cargar-archivo-fotoTorneo', {
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+        description: 'Archivo a cargar',
+      },
+    },
+  })
+  async CargarArchivoTorneo(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @requestBody.file() request: Request,
+  ): Promise<object | false> {
+    const filePath = path.join(__dirname, ConfiguracionGeneral.carpetaFotosTorneos);
     let res = await this.StoreFileToPath(
       filePath,
       ConfiguracionGeneral.campodeNombreArchivo,
