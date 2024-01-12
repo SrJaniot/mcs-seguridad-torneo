@@ -34,6 +34,14 @@ export class MenuRol extends Entity {
   editar: boolean;
 
   @property({
+    type: 'boolean',
+    required: true,
+  })
+  buscar_id: boolean;
+
+
+
+  @property({
     type: 'string',
   })
   rolId?: string;

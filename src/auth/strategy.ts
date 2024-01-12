@@ -46,6 +46,7 @@ export class AuthStrategy implements AuthenticationStrategy {
         }
       });
       let continuar: boolean = false;
+      //console.log(permiso);
       if(permiso){
         switch (Accion) {
           case "guardar":
@@ -59,6 +60,10 @@ export class AuthStrategy implements AuthenticationStrategy {
             break;
           case "editar":
             continuar=permiso.editar;
+            break;
+
+          case "buscar_id":
+            continuar=permiso.buscar_id;
             break;
 
 

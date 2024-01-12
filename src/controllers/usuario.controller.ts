@@ -103,6 +103,11 @@ export class UsuarioController {
     return this.usuarioRepository.updateAll(usuario, where);
   }
 
+    // @authenticate("auth") se ejefcuta el metodo de autenticacion de estrategia carpeta auth archivo  strategy.ts
+  @authenticate({
+    strategy:"auth",
+    options:[ConfiguracionSeguridad.menu_ADMINISTAR_UsuarioID,ConfiguracionSeguridad.buscarAccion_id]
+})
   @get('/usuarios/{id}')
   @response(200, {
     description: 'Usuario model instance',

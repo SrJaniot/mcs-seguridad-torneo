@@ -10,6 +10,7 @@ export namespace ConfiguracionSeguridad{
   export const guardarAccion="guardar";
   export const eliminarAccion="eliminar";
   export const editarAccion="editar";
+  export const buscarAccion_id="buscar_id";
 
   //-------------------------roles -------------------------------------
   export const rolAdministradorID="6594c9c83be1024aa881a5a3";
