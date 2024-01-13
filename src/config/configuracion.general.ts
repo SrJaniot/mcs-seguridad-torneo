@@ -10,6 +10,7 @@ export namespace ConfiguracionGeneral {
     '.JPG',
     '.JPEG',
     '.GIF',
+    //'.PDF'
   ];
   //-------------------------servidor -------------------------------------
   export const puertoServidor: number = 3000;
