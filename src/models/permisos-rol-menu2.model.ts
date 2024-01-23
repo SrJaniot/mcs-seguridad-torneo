@@ -1,14 +1,12 @@
 import {Model, model, property} from '@loopback/repository';
 
 @model()
-export class PermisosRolMenu extends Model {
+export class PermisosRolMenu2 extends Model {
   @property({
     type: 'string',
     required: true,
   })
-  token: string;
-
-  
+  idRol: string;
 
   @property({
     type: 'string',
@@ -23,13 +21,13 @@ export class PermisosRolMenu extends Model {
   accion: string;
 
 
-  constructor(data?: Partial<PermisosRolMenu>) {
+  constructor(data?: Partial<PermisosRolMenu2>) {
     super(data);
   }
 }
 
-export interface PermisosRolMenuRelations {
+export interface PermisosRolMenu2Relations {
   // describe navigational properties here
 }
 
-export type PermisosRolMenuWithRelations = PermisosRolMenu & PermisosRolMenuRelations;
+export type PermisosRolMenu2WithRelations = PermisosRolMenu2 & PermisosRolMenu2Relations;

@@ -1,9 +1,9 @@
 // Uncomment these imports to begin using these cool features!
 
 import {getModelSchemaRef, post, requestBody, response} from '@loopback/rest';
-import {PermisosRolMenu} from '../models';
+import {PermisosRolMenu, PermisosRolMenu2} from '../models';
 import {service} from '@loopback/core';
-import {AuthService} from '../services';
+import {AuthService, SeguridadService} from '../services';
 import {UserProfile} from '@loopback/security';
 
 // import {inject} from '@loopback/core';
@@ -13,6 +13,8 @@ export class AuthController {
   constructor(
     @service(AuthService)
     private authService: AuthService,
+    @service(SeguridadService)
+    private seguridadService: SeguridadService,
   ) {}
 
 
@@ -36,6 +38,27 @@ export class AuthController {
       },
     })
     datos: PermisosRolMenu,
+  ): Promise<UserProfile | undefined>{
+    let idRol=this.seguridadService.obtenerRolDesdeToken(datos.token);
+    console.log(idRol);
+    return this.authService.VerificarPermisoDeUsuarioPorRol(idRol,datos.idMenu,datos.accion);
+  }
+
+
+  @post('/validar-permisos-idrol')
+  @response(200, {
+    description: 'validacion de permisos de usuario para la logica de negocios',
+    content: {'application/json': {schema: getModelSchemaRef(PermisosRolMenu2)}},
+  })
+  async ValidarPermisosDeUsuarioidrol(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(PermisosRolMenu2 ),
+        },
+      },
+    })
+    datos: PermisosRolMenu2,
   ): Promise<UserProfile | undefined>{
     return this.authService.VerificarPermisoDeUsuarioPorRol(datos.idRol,datos.idMenu,datos.accion);
   }

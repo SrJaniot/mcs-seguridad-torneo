@@ -21,7 +21,7 @@ export class AuthService {
       }
     });
     let continuar: boolean = false;
-    //console.log(permiso);
+    console.log(permiso);
     if(permiso){
       switch (Accion) {
         case "guardar":
@@ -51,7 +51,7 @@ export class AuthService {
         });
         return perfil;
       }else{
-        throw new HttpErrors[401]("El usuario no tiene permiso para realizar esta accion");
+        return undefined;
       }
 
     }else{

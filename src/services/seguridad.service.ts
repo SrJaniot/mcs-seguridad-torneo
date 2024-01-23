@@ -120,6 +120,7 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
   obtenerRolDesdeToken(token:string):string{
     try {
       let datos = jwt.verify(token, ConfiguracionSeguridad.claveJWT);
+      
       if(datos){
         return datos.rol;
       } else {
@@ -137,7 +138,7 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
 
 
 
-  
+
 
 
 }
