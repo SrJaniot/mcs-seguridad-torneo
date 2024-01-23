@@ -132,4 +132,12 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
   }
 
 
+
+
+
+
+
+  
+
+
 }

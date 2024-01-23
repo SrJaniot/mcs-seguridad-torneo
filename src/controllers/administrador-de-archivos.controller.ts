@@ -5,6 +5,7 @@
 //REQUIERE INSTALAR EL MODULO MULTER
 //instalar "npm i multer"
 //npm i --save-dev @types/multer
+//npm i @loopback/authentication
 
 //importaciones necesarias para subir archivos
 import {inject} from '@loopback/core';

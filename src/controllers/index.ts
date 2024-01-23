@@ -13,3 +13,4 @@ export * from './menu.controller';
 export * from './dml-postgres-mongo.controller';
 export * from './permisos.controller';
 export * from './administrador-de-archivos.controller';
+export * from './auth.controller';

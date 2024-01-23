@@ -6,7 +6,7 @@ import {inject, service} from '@loopback/core';
 import {HttpErrors, Request} from '@loopback/rest';
 import {UserProfile} from '@loopback/security';
 import parseBearerToken from 'parse-bearer-token';
-import {SeguridadService} from '../services';
+import {AuthService, SeguridadService} from '../services';
 import {MenuRolRepository} from '../repositories';
 import {repository} from '@loopback/repository';
 
@@ -21,7 +21,9 @@ export class AuthStrategy implements AuthenticationStrategy {
     @inject(AuthenticationBindings.METADATA)
     private metadata:AuthenticationMetadata[],
     @repository(MenuRolRepository)
-    private repositorioMenuRol: MenuRolRepository
+    private repositorioMenuRol: MenuRolRepository,
+    @service(AuthService)
+    private servicioAuth: AuthService,
 
   ) {}
 
@@ -38,51 +40,14 @@ export class AuthStrategy implements AuthenticationStrategy {
       let idMenu: string =this.metadata[0].options![0]; //MENU ADMINISTRAR USUARIO
       let Accion: string =this.metadata[0].options![1]; //ACCION LISTAR
       //console.log(this.metadata);
-      // EN ESTA VARIABLE PERMISO LA API SABE QUE PERMISO PUEDE REALIZAR ESTE ROL
-      let permiso = await this.repositorioMenuRol.findOne({
-        where:{
-          rolId:idRol,
-          menuId:idMenu,
-        }
-      });
-      let continuar: boolean = false;
-      //console.log(permiso);
-      if(permiso){
-        switch (Accion) {
-          case "guardar":
-            continuar=permiso.guardar;
-            break;
-          case "listar":
-            continuar=permiso.listar;
-            break;
-          case "elminar":
-            continuar=permiso.elminar;
-            break;
-          case "editar":
-            continuar=permiso.editar;
-            break;
-
-          case "buscar_id":
-            continuar=permiso.buscar_id;
-            break;
-
-
-
-          default:
-            throw new HttpErrors[401]("El usuario no tiene permiso para realizar esta accion por que no existe esa accion");
-        }
-        if(continuar){
-          let perfil: UserProfile= Object.assign({
-            permitido:"OK"
-          });
-          return perfil;
-        }else{
-          throw new HttpErrors[401]("El usuario no tiene permiso para realizar esta accion");
-        }
-
-      }else{
-        throw new HttpErrors[401]("El usuario no tiene permiso para realizar esta accion");
+      try{
+        // EN ESTA VARIABLE PERMISO LA API SABE QUE PERMISO PUEDE REALIZAR ESTE ROL
+        let res = await this.servicioAuth.VerificarPermisoDeUsuarioPorRol(idRol, idMenu, Accion);
+        return res;
+      }catch(error){
+        throw error;
       }
+
     }
     throw new HttpErrors[401]("El usuario no tiene permiso para realizar esta accion por falta de token");
   }
