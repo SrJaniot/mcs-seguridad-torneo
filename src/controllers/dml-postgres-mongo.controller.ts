@@ -4,8 +4,9 @@ import {CrearusuarioMongoPostgres, Credenciales, FactorDeAutenticacionPorCodigo,
 import {DefaultCrudRepository, juggler, repository} from '@loopback/repository';
 import {LoginRepository, UsuarioRepository} from '../repositories';
 import {inject, service} from '@loopback/core';
-import {SeguridadService} from '../services';
+import {NotificacionesService, SeguridadService} from '../services';
 import {ConfiguracionSeguridad} from '../config/seguridad.config';
+import {ConfiguracionNotificaciones} from '../config/notificaciones.config';
 
 // import {inject} from '@loopback/core';
 
@@ -30,6 +31,9 @@ export class DmlPostgresMongoController {
     //inyeccion para poder utilizar el servicio de seguridad
     @service(SeguridadService)
     public seguridadService: SeguridadService,
+    //inyeccion para poder utilizar el servicio de notificaciones
+    @service(NotificacionesService)
+    public notificacionesService: NotificacionesService,
 
 
 
@@ -90,7 +94,6 @@ export class DmlPostgresMongoController {
       let clavecifrada = this.seguridadService.encriptartexto(data.clave);
       //ASIGNAR LA CLAVE CIFRADA AL USUARIO
       usuario.clave = clavecifrada;
-      //ENVIAR CORREO ELECTRONICO DE CONFIRMACION
       //console.log(params);
 
       //IF QUE PERMITE SABER SI EL CORREO YA EXISTE EN LA BASE DE DATOS MONGO
@@ -117,6 +120,26 @@ export class DmlPostgresMongoController {
       }
 
       const resultMongoDB = await this.usuarioRepository.create(usuario);
+      //ENVIAR CORREO ELECTRONICO DE CONFIRMACION
+      let datosCorreo ={
+        correoDestino:usuario.correo,
+        nombreDestino:usuario.nombre,
+        contenidoCorreo:'Bienvenido a la plataforma de jugadores de la liga de videojuegos, su registro ha sido exitoso',
+        asuntoCorreo:'Registro exitoso',
+      }
+      let urlCorreo = ConfiguracionNotificaciones.urlCorreoBienvenida;
+      this.notificacionesService.EnviarCorreoElectronico(datosCorreo,urlCorreo);
+      //ENVIAR MENSAJE DE WHATSAPP DE CONFIRMACION
+      let datosWhatsapp ={
+        message:`¡Bienvenid@ ${usuario.nombre} ! 🤩
+¡Estamos encantados de que formes parte de nuestra comunidad de gamers! Prepárate para vivir la emoción de los torneos y descubrir tu potencial. ¡Qué cada partida sea un paso hacia la grandeza! 🎮🕹️`,
+        phone:`57${usuario.celular}`,
+      }
+      let urlWhatsapp = ConfiguracionNotificaciones.urlWhatsapp;
+      this.notificacionesService.EnviarMensajeWhatsapp(datosWhatsapp,urlWhatsapp);
+
+
+
       return {
         "CODIGO": 200,
         "MENSAJE": "Operación exitosa",
@@ -169,6 +192,7 @@ export class DmlPostgresMongoController {
 
       await this.loginRepository.create(login);
       //notificar al usuario via correo o sms del codigo 2fa
+
       return {
       "CODIGO": 200,
       "MENSAJE": "Operación exitosa",
