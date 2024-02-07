@@ -192,6 +192,26 @@ export class DmlPostgresMongoController {
 
       await this.loginRepository.create(login);
       //notificar al usuario via correo o sms del codigo 2fa
+      let datosCorreo ={
+        correoDestino:usuario.correo,
+        nombreDestino:usuario.nombre,
+        contenidoCorreo:`Su codigo de verificacion es: ${codigo2fa}`,
+        asuntoCorreo:'Codigo de verificacion',
+        codigo2fa:login.codigo_2fa,
+      };
+      let urlCorreo = ConfiguracionNotificaciones.urlCorreoCodigo2fa;
+      this.notificacionesService.EnviarCorreoElectronico(datosCorreo,urlCorreo);
+
+      let datosWhatsapp ={
+        message:`¡Hola ${usuario.nombre}! 🤩
+Tu código de verificación es: ${codigo2fa}`,
+        phone:`57${usuario.celular}`,
+      }
+      let urlWhatsapp = ConfiguracionNotificaciones.urlWhatsapp;
+      this.notificacionesService.EnviarMensajeWhatsapp(datosWhatsapp,urlWhatsapp);
+
+
+
 
       return {
       "CODIGO": 200,
