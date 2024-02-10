@@ -39,7 +39,7 @@ export class AuthController {
     })
     datos: PermisosRolMenu,
   ): Promise<UserProfile | undefined>{
-    let idRol=this.seguridadService.obtenerRolDesdeToken(datos.token);
+    let  idRol=await this.seguridadService.obtenerRolDesdeToken(datos.token);
     console.log(idRol);
     return this.authService.VerificarPermisoDeUsuarioPorRol(idRol,datos.idMenu,datos.accion);
   }

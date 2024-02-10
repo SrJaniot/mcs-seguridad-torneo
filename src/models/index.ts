@@ -9,3 +9,4 @@ export * from './crearusuario-mongo-postgres.model';
 export * from './factor-de-autenticacion-por-codigo.model';
 export * from './permisos-rol-menu.model';
 export * from './permisos-rol-menu2.model';
+export * from './cerrar-sesion.model';

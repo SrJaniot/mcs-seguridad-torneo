@@ -117,11 +117,13 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
    * @param token
    * @returns el _id del rol
    */
-  obtenerRolDesdeToken(token:string):string{
+  async obtenerRolDesdeToken(token:string): Promise<string> {
     try {
       let datos = jwt.verify(token, ConfiguracionSeguridad.claveJWT);
-      
-      if(datos){
+      //valida el estado del token que esta en la base de datos
+      let estado_tokendb = await this.validarEstadoToken(token);
+      //console.log(estado_tokendb);
+      if(datos && estado_tokendb){
         return datos.rol;
       } else {
         throw new HttpErrors.Unauthorized("El token es invalido");
@@ -130,6 +132,20 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
       //lanzar un error de token invalido
       throw new HttpErrors.Unauthorized("El token es invalido");
     }
+  }
+
+  //funcion que valida si el estado del token es true
+  async validarEstadoToken(token:string):Promise<boolean>{
+    let estado_tokendb= await this.loginRepository.findOne({
+      where:{
+        token:token,
+        estado_token:true
+      }
+    });
+    if(estado_tokendb){
+      return true;
+    }
+    return false;
   }
 
 

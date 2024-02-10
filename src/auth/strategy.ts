@@ -36,7 +36,7 @@ export class AuthStrategy implements AuthenticationStrategy {
   async authenticate(request: Request): Promise<UserProfile | undefined> {
     let token=parseBearerToken(request);
     if(token){
-      let idRol=this.servicioSeguridad.obtenerRolDesdeToken(token);
+      let idRol= await this.servicioSeguridad.obtenerRolDesdeToken(token);
       let idMenu: string =this.metadata[0].options![0]; //MENU ADMINISTRAR USUARIO
       let Accion: string =this.metadata[0].options![1]; //ACCION LISTAR
       //console.log(this.metadata);
