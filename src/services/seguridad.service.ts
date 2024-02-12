@@ -62,7 +62,9 @@ async identificarusuario(credenciales:Credenciales): Promise< Usuario|null> {
   let usuario=await this.usuarioRepository.findOne({
     where:{
       correo:credenciales.correo,
-      clave:credenciales.clave
+      clave:credenciales.clave,
+      estadoValidacion:true
+
     }
   });
   //console.log(usuario);
