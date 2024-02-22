@@ -11,6 +11,13 @@ export class Usuario extends Entity {
   })
   _id?: string;
 
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  idPostgres?: number;
+
   @property({
     type: 'string',
     required: true,

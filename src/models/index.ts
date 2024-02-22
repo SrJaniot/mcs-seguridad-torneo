@@ -11,3 +11,4 @@ export * from './permisos-rol-menu.model';
 export * from './permisos-rol-menu2.model';
 export * from './cerrar-sesion.model';
 export * from './hash-validacion-usuario.model';
+export * from './permisos-id-postgres.model';

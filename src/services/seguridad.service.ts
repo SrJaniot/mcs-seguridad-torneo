@@ -107,6 +107,7 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
       nombre: usuario.nombre,
       rol: usuario.rolId,
       correo: usuario.correo,
+      idPostgres: usuario.idPostgres
     }
     let token = jwt.sign(datos, ConfiguracionSeguridad.claveJWT);
     return token;
@@ -148,6 +149,31 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
       return true;
     }
     return false;
+  }
+
+  /**
+   * Metodo para obtener el usuario desde el token
+   * @param token
+   * @returns el _id del usuario
+   */
+  async obtenerUsuarioDesdeToken(token:string): Promise<string> {
+    try {
+      let datos = jwt.verify(token, ConfiguracionSeguridad.claveJWT);
+      //console.log("datos desde obtenerUsuarioDesdeToken");
+      //console.log(datos);
+      let estado_tokendb = await this.validarEstadoToken(token);
+
+      if(datos && estado_tokendb){
+        //console.log("TODO BIEN, DATOS.IDPOSTGRES");
+        //console.log(datos.idPostgres);
+        return datos.idPostgres;
+      } else {
+        throw new HttpErrors.Unauthorized("El token es invalido");
+      }
+    } catch (err) {
+      //lanzar un error de token invalido
+      throw new HttpErrors.Unauthorized("El token es invalido");
+    }
   }
 
 

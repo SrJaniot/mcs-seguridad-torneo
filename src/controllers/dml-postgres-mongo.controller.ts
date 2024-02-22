@@ -127,7 +127,14 @@ export class DmlPostgresMongoController {
         };
       }
 
+      //agregar la id_usuario de postgres a mongo
+      const sql2 = ConfiguracionSeguridad.fun_retornar_id_jugador_apartir_correo;
+      const params2 = [usuario.correo];
+      let resultPostgresFuncion = await this.genericRepository.execute(sql2, params2);
+      usuario.idPostgres = resultPostgresFuncion[0].fun_retornar_id_jugador;
       const resultMongoDB = await this.usuarioRepository.create(usuario);
+
+
       //ENVIAR CORREO ELECTRONICO DE CONFIRMACION
      /**  let datosCorreo = {
         correoDestino: usuario.correo,
@@ -244,6 +251,11 @@ export class DmlPostgresMongoController {
         };
       }
 
+      //agregar la id_usuario de postgres a mongo
+      const sql2 = ConfiguracionSeguridad.fun_retornar_id_jugador_apartir_correo;
+      const params2 = [usuario.correo];
+      let resultPostgresFuncion = await this.genericRepository.execute(sql2, params2);
+      usuario.idPostgres = resultPostgresFuncion[0].fun_retornar_id_jugador;
       const resultMongoDB = await this.usuarioRepository.create(usuario);
       //ENVIAR CORREO ELECTRONICO DE CONFIRMACION
       let datosCorreo = {
