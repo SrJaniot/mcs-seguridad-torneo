@@ -113,6 +113,46 @@ export class AdministradorDeArchivosController {
   }
 
 
+    //@authenticate('auth')
+    @post('/cargar-archivo-fotoEquipo', {
+      responses: {
+        200: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+              },
+            },
+          },
+          description: 'Archivo a cargar',
+        },
+      },
+    })
+    async CargarArchivoEquipo(
+      @inject(RestBindings.Http.RESPONSE) response: Response,
+      @requestBody.file() request: Request,
+    ): Promise<object | false> {
+      const filePath = path.join(__dirname, ConfiguracionGeneral.carpetaFotosEquipos);
+      let res = await this.StoreFileToPath(
+        filePath,
+        ConfiguracionGeneral.campodeNombreArchivo,
+        request,
+        response,
+        ConfiguracionGeneral.extensionesPermitidasImagenes,
+      );
+      if (res) {
+        const filename = response.req?.file?.filename;
+        if (filename) {
+          return {file: filename};
+        }
+      }
+      return res;
+    }
+
+
+
+
+
 
 
 
@@ -236,8 +276,11 @@ private ObtenerArchivosPorTipo(tipo: number) {
     case 2:
       filePath = path.join(__dirname, ConfiguracionGeneral.carpetaFotosTorneos);
       break;
-    case 3:
-      break;
+      case 3:
+        filePath = path.join(__dirname, ConfiguracionGeneral.carpetaFotosEquipos);
+        break;
+      case 4:
+        break;
   }
   return filePath;
 }
