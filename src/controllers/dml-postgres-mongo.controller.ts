@@ -540,6 +540,20 @@ Tu código de verificación es: ${codigo2fa}`,
   }
 
 
+  //METODO PARA GENERAR UN HASH DE 100 CARACTERES
+  @post('/generar-hash-100')
+  @response(200, {
+    description: 'Generar un hash',
+  })
+  async generarHash(): Promise<object> {
+    let hash = this.seguridadService.crearTextoAleatoria(100);
+    return {hash};
+  }
+
+
+
+
+
 
 
 
