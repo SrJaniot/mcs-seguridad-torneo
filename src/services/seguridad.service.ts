@@ -107,7 +107,10 @@ async validarCoddigo2fa(credenciales2fa: FactorDeAutenticacionPorCodigo): Promis
       nombre: usuario.nombre,
       rol: usuario.rolId,
       correo: usuario.correo,
-      idPostgres: usuario.idPostgres
+      idPostgres: usuario.idPostgres,
+      numDocumento: usuario.num_documento,
+      edad: usuario.edad,
+
     }
     let token = jwt.sign(datos, ConfiguracionSeguridad.claveJWT);
     return token;

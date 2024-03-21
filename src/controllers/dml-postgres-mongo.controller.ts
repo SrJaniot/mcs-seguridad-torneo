@@ -81,6 +81,10 @@ export class DmlPostgresMongoController {
         data.correo,
         data.foto_perfil_jugador,
         data.id_ciudad,
+
+        data.id_tipo_documento,
+        data.num_documento,
+
         data.nickname_jugador,
         data.liga_jugador,
         data.link_cuenta_jugador,
@@ -91,8 +95,10 @@ export class DmlPostgresMongoController {
       //CREAR UN OBJETO DE TIPO USUARIO PARA INSERTARLO EN LA BASE DE DATOS MONGO
       let usuario: Usuario = new Usuario();
       usuario.nombre = data.nombre;
-      usuario.correo = data.correo;
+      usuario.correo = data.correo.toLowerCase();;
       usuario.celular = data.celular;
+      usuario.edad = data.edad;
+      usuario.num_documento = data.num_documento;
       //ROL USUARIO
       usuario.rolId = ConfiguracionSeguridad.rolJugadorID;
       //CIFRAR LA CONTRASEÑA
@@ -129,7 +135,8 @@ export class DmlPostgresMongoController {
 
       //agregar la id_usuario de postgres a mongo
       const sql2 = ConfiguracionSeguridad.fun_retornar_id_jugador_apartir_correo;
-      const params2 = [usuario.correo];
+      const correo_en_minusculas = usuario.correo.toLowerCase();
+      const params2 = [correo_en_minusculas];
       let resultPostgresFuncion = await this.genericRepository.execute(sql2, params2);
       usuario.idPostgres = resultPostgresFuncion[0].fun_retornar_id_jugador;
       const resultMongoDB = await this.usuarioRepository.create(usuario);
@@ -205,6 +212,10 @@ export class DmlPostgresMongoController {
         data.correo,
         data.foto_perfil_jugador,
         data.id_ciudad,
+
+        data.id_tipo_documento,
+        data.num_documento,
+
         data.nickname_jugador,
         data.liga_jugador,
         data.link_cuenta_jugador,
@@ -213,8 +224,10 @@ export class DmlPostgresMongoController {
       //CREAR UN OBJETO DE TIPO USUARIO PARA INSERTARLO EN LA BASE DE DATOS MONGO
       let usuario: Usuario = new Usuario();
       usuario.nombre = data.nombre;
-      usuario.correo = data.correo;
+      usuario.correo = data.correo.toLowerCase();
       usuario.celular = data.celular;
+      usuario.edad = data.edad;
+      usuario.num_documento = data.num_documento;
       //ROL USUARIO
       usuario.rolId = ConfiguracionSeguridad.rolJugadorID;
       //CIFRAR LA CONTRASEÑA
@@ -253,9 +266,14 @@ export class DmlPostgresMongoController {
 
       //agregar la id_usuario de postgres a mongo
       const sql2 = ConfiguracionSeguridad.fun_retornar_id_jugador_apartir_correo;
-      const params2 = [usuario.correo];
+      const correo_en_minusculas = usuario.correo.toLowerCase();
+      const params2 = [correo_en_minusculas];
+      //console.log(params2);
       let resultPostgresFuncion = await this.genericRepository.execute(sql2, params2);
+      //console.log(resultPostgresFuncion);
       usuario.idPostgres = resultPostgresFuncion[0].fun_retornar_id_jugador;
+      //console.log(usuario);
+      //console.log(usuario.idPostgres);
       const resultMongoDB = await this.usuarioRepository.create(usuario);
       //ENVIAR CORREO ELECTRONICO DE CONFIRMACION
       let datosCorreo = {

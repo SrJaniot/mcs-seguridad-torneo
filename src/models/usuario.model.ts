@@ -34,6 +34,18 @@ export class Usuario extends Entity {
     type: 'string',
     required: true,
   })
+  num_documento: string;
+
+  @property({
+    type: 'number',
+    required: true,
+  })
+  edad: number;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
   celular: string;
 
   @property({

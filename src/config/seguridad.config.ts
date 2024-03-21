@@ -21,7 +21,7 @@ export namespace ConfiguracionSeguridad {
 
 
   //-------------------------funciones  SQL -------------------------------------
-  export const funcionInsertarUsuarioJugadorDatosPersonales = 'SELECT fun_insert_jugador_datospersonales($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+  export const funcionInsertarUsuarioJugadorDatosPersonales = 'SELECT fun_insert_jugador_datospersonales($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)';
   export const fun_retornar_id_jugador_apartir_correo = 'SELECT fun_retornar_id_jugador($1)';
 
 

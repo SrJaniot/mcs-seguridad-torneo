@@ -39,6 +39,20 @@ export class CrearusuarioMongoPostgres extends Model {
   id_ciudad: number;
 
   @property({
+    type: 'number',
+    required: true,
+  })
+  id_tipo_documento: number;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  num_documento: string;
+
+
+
+  @property({
     type: 'string',
     required: true,
   })
