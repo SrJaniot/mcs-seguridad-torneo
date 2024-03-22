@@ -568,6 +568,16 @@ Tu código de verificación es: ${codigo2fa}`,
     return {hash};
   }
 
+  //METODO PARA GENERAR UN HASH DE 10 CARACTERES
+  @post('/generar-hash-10')
+  @response(200, {
+    description: 'Generar un hash',
+  })
+  async generarHash10(): Promise<object> {
+    let hash = this.seguridadService.crearTextoAleatoria(10);
+    return {hash};
+  }
+
 
 
 
